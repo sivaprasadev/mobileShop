@@ -9,6 +9,8 @@ module.exports={
         db.get().collection('product').insertOne(product).then((data)=>{
             callback(data.ops[0]._id)
         })
+
+        /*addProduct is used for admin to add new products*/
     },
 
     getAllProducts:()=>{
@@ -16,6 +18,8 @@ module.exports={
             let products=await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray()
             resolve(products)
         })
+
+        /*getAllProducts used to display all products added by admin*/
     },
 
     deleteProduct:(proId)=>{

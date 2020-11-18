@@ -141,32 +141,55 @@ router.get('/add-to-cart/:id', function (req, res) {
 });
 router.post('/change-product-quantity', function (req, res, next) {
   console.log(req.body);
-  userHelpers.changeProductQuantity(req.body).then(function (response) {
-    res.json(response);
+  userHelpers.changeProductQuantity(req.body).then(function _callee3(response) {
+    return regeneratorRuntime.async(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.t0 = commaNumber;
+            _context3.next = 3;
+            return regeneratorRuntime.awrap(userHelpers.getTotalAmount(req.body.user));
+
+          case 3:
+            _context3.t1 = _context3.sent;
+            response.total = (0, _context3.t0)(_context3.t1);
+            res.json(response);
+
+          case 6:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    });
   });
 });
-router.get('/place-order', verifyLogin, function _callee3(req, res) {
+router.get('/place-order', verifyLogin, function _callee4(req, res) {
   var total;
-  return regeneratorRuntime.async(function _callee3$(_context3) {
+  return regeneratorRuntime.async(function _callee4$(_context4) {
     while (1) {
-      switch (_context3.prev = _context3.next) {
+      switch (_context4.prev = _context4.next) {
         case 0:
-          _context3.t0 = commaNumber;
-          _context3.next = 3;
+          _context4.t0 = commaNumber;
+          _context4.next = 3;
           return regeneratorRuntime.awrap(userHelpers.getTotalAmount(req.session.user._id));
 
         case 3:
-          _context3.t1 = _context3.sent;
-          total = (0, _context3.t0)(_context3.t1);
+          _context4.t1 = _context4.sent;
+          total = (0, _context4.t0)(_context4.t1);
           res.render('user/place-order', {
-            total: total
+            total: total,
+            user: req.session.user
           });
 
         case 6:
         case "end":
-          return _context3.stop();
+          return _context4.stop();
       }
     }
   });
+});
+router.post('/place-order', function (req, res) {
+  userHelpers.placeOrder(req.body).then(function (response) {});
+  console.log(req.body);
 });
 module.exports = router;

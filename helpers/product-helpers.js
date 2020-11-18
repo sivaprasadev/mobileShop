@@ -2,6 +2,7 @@ var db=require('../config/connection')
 var collection = require('../config/collections')
 const { reject } = require('bcrypt/promises')
 const { ObjectID } = require('mongodb')
+const { response } = require('../app')
 var objectId=require('mongodb').ObjectID
 module.exports={
     addProduct:(product,callback)=>{
@@ -15,12 +16,16 @@ module.exports={
 
     getAllProducts:()=>{
         return new Promise(async(resolve,reject)=>{
-            let products=await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray()
+            let products=await db.get().collection(collection.PRODUCT_COLLECTION).find().
+            toArray()
+            //console.log(products);
             resolve(products)
         })
 
         /*getAllProducts used to display all products added by admin*/
     },
+
+    
 
     deleteProduct:(proId)=>{
         return new Promise((resolve,reject)=>{

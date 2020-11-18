@@ -23,7 +23,7 @@
                         <button class="btn btn-info mr-3 cart-item-count" id="buttonA"
                             onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
                         <span id="{{this.product._id}}">{{this.quantity}}</span>
-                        <button class="btn btn-info ml-3 cart-item-count"
+                        <button class="btn btn-info ml-3 cart-item-count" id="buttonB"
                             onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
                     </td>
                     <td>
@@ -41,28 +41,26 @@
     </div>
 </section>
 <script>
+
     function changeQuantity(cartId, proId, userId, count) {
         let quantity = parseInt(document.getElementById(proId).innerHTML)
+        console.log(quantity)
         count = parseInt(count)
         $.ajax({
             url: '/change-product-quantity',
             data: {
-                user: userId,
                 cart: cartId,
                 product: proId,
+                user: userId,
                 count: count,
-                quantity: quantity
+                quantity: quantity //error in this line
             },
             method: 'post',
             success: (response) => {
-                if (response.removeProduct) {
-                    alert("This Product will remove from the cart")
-                    location.reload()
-                } else {
+              
                     document.getElementById(proId).innerHTML = quantity + count
                     document.getElementById('total').innerHTML = response.total
-                }
-
+                
             }
         })
     }

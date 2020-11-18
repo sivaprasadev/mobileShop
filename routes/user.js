@@ -75,7 +75,7 @@ router.get('/cart', verifyLogin, async(req, res) => {
   if(products.length>0){
     total=commaNumber(await userHelpers.getTotalAmount(req.session.user._id))
   }
-  console.log(products)
+  //console.log(products)
   res.render('user/cart',{products,user:req.session.user,total})
 })
 router.get('/add-to-cart/:id', (req, res) => {
@@ -88,7 +88,7 @@ router.get('/add-to-cart/:id', (req, res) => {
 })
 
 router.post('/change-product-quantity',(req,res,next)=>{
-  console.log(req.body);
+  //console.log(req.body);
   userHelpers.changeProductQuantity(req.body).then(async(response)=>{
     response.total=commaNumber(await userHelpers.getTotalAmount(req.body.user))
     res.json(response)
@@ -115,7 +115,7 @@ router.post('/place-order',async(req,res)=>{
     }
     
   })
-  console.log(req.body);
+  //console.log(req.body);
 })
 
 router.get('/order-success',(req,res)=>{
@@ -129,12 +129,12 @@ router.get('/orders',async(req,res)=>{
 
 router.get('/view-order-products/:id',async(req,res)=>{
   let products=await userHelpers.getOrderProducts(req.params.id)
-  console.log(products);
+  //console.log(products);
   res.render('user/view-order-products',{user:req.session.user,products})
 })
 
 router.post('/verify-payment',(req,res)=>{
-  console.log(req.body);
+  //console.log(req.body);
   userHelpers.verifyPayment(req.body).then(()=>{
     userHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
       res.json({status:true})

@@ -1,6 +1,5 @@
 <section>
     <div class="container">
-
         <table class="table mt-5">
             <thead>
                 <tr>
@@ -9,21 +8,23 @@
                     <th scope="col">Title</th>
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
+
                 </tr>
             </thead>
             <tbody>
                 {{#each products}}
                 <tr>
-
+                    <h1 id="Quantity" hidden>{{this.quantity}}</h1>
                     <td><img src="/product-images/{{this.product._id}}.jpg" style="width:70px;height:70px" alt=""></td>
                     <td>{{this.product.Name}}</td>
                     <td>Rs.{{this.product.Price}}</td>
 
+
                     <td>
-                        <button class="btn btn-info mr-3 cart-item-count" id="buttonA"
+                        <button class="btn btn-info mr-3 cart-item-count" id="button(-)"
                             onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
                         <span id="{{this.product._id}}">{{this.quantity}}</span>
-                        <button class="btn btn-info ml-3 cart-item-count" id="buttonB"
+                        <button class="btn btn-info ml-3 cart-item-count" id="button(+)"
                             onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
                     </td>
                     <td>
@@ -42,14 +43,25 @@
 </section>
 <script>
 
-    
+    let Quantity = document.getElementById('Quantity').innerHTML
+
+    if (Quantity == 1) {
+        document.getElementById('button(-)').disabled = true
+    } else {
+        document.getElementById('button(-)').disabled = false
+    }
+
+
     function changeQuantity(cartId, proId, userId, count) {
         count = parseInt(count)
         let quantity = parseInt(document.getElementById(proId).innerHTML)
         let qty = quantity + count
-        console.log(qty)
+        if (qty > 1) {
+            document.getElementById('button(-)').disabled = false
+        } else if (qty == 1) {
+            document.getElementById('button(-)').disabled = true
+        }
 
-        
         $.ajax({
             url: '/change-product-quantity',
             data: {
@@ -61,10 +73,10 @@
             },
             method: 'post',
             success: (response) => {
-              
-                    document.getElementById(proId).innerHTML = quantity + count
-                    document.getElementById('total').innerHTML = response.total
-                
+
+                document.getElementById(proId).innerHTML = quantity + count
+                document.getElementById('total').innerHTML = response.total
+
             }
         })
     }

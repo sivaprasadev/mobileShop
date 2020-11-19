@@ -42,10 +42,14 @@
 </section>
 <script>
 
+    
     function changeQuantity(cartId, proId, userId, count) {
-        let quantity = parseInt(document.getElementById(proId).innerHTML)
-        console.log(quantity)
         count = parseInt(count)
+        let quantity = parseInt(document.getElementById(proId).innerHTML)
+        let qty = quantity + count
+        console.log(qty)
+
+        
         $.ajax({
             url: '/change-product-quantity',
             data: {
@@ -53,7 +57,7 @@
                 product: proId,
                 user: userId,
                 count: count,
-                quantity: quantity //error in this line
+                quantity: qty
             },
             method: 'post',
             success: (response) => {

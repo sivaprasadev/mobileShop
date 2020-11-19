@@ -75,7 +75,7 @@ router.get('/cart', verifyLogin, async(req, res) => {
   if(products.length>0){
     total=commaNumber(await userHelpers.getTotalAmount(req.session.user._id))
   }
-  //console.log(products)
+  console.log(products)
   res.render('user/cart',{products,user:req.session.user,total})
 })
 router.get('/add-to-cart/:id', (req, res) => {
@@ -88,7 +88,7 @@ router.get('/add-to-cart/:id', (req, res) => {
 })
 
 router.post('/change-product-quantity',(req,res,next)=>{
-  //console.log(req.body);
+  console.log(req.body);
   userHelpers.changeProductQuantity(req.body).then(async(response)=>{
     response.total=commaNumber(await userHelpers.getTotalAmount(req.body.user))
     res.json(response)

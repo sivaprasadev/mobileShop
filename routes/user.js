@@ -15,7 +15,7 @@ const verifyLogin = (req, res, next) => {
 }
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-  let user = req.session.user 
+  let user = req.session.user
   //console.log(user);
   let cartCount=null
   if(req.session.user){
@@ -80,19 +80,20 @@ router.get('/cart', verifyLogin, async(req, res) => {
 })
 router.get('/add-to-cart/:id', (req, res) => {
   //console.log("api call");
+  
   userHelpers.addToCart(req.params.id, req.session.user._id).then(() => {
     //res.redirect('/')
     res.json({status:true})
   })
-
 })
 
 router.post('/change-product-quantity',(req,res,next)=>{
-  console.log(req.body);
+  //console.log(req.body);
   userHelpers.changeProductQuantity(req.body).then(async(response)=>{
+    
     response.total=commaNumber(await userHelpers.getTotalAmount(req.body.user))
     res.json(response)
-
+    
   })
 })
 
@@ -149,6 +150,13 @@ router.get('/lpage',(req,res)=>{
   res.render('user/sampleLandingPage',{layout:'landing.hbs'})
 })
 
+router.get('/delete-product/:id',(req,res)=>{
+  let proId=req.params.id
+  //console.log("productId"+proId)
+  userHelpers.deleteCartProduct(proId).then((response)=>{
+    res.redirect('/cart')
+  })
+})
 
 
 module.exports = router;

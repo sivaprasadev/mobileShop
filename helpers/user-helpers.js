@@ -5,6 +5,7 @@ const { promise, reject } = require('bcrypt/promises')
 const { response } = require('../app')
 var objectId = require('mongodb').ObjectID
 const Razorpay = require('razorpay')
+const { resolve } = require('path')
 var instance = new Razorpay({
     key_id: 'rzp_test_GeOYcXLumB15nN',
     key_secret: 'pPoWieNVsxctqz1MBHYQRUko',
@@ -121,6 +122,7 @@ module.exports = {
 
             ]).toArray()
             //console.log(cartItems[0].products);
+            //console.log(cartItems);
             resolve(cartItems)
             
         })
@@ -133,7 +135,6 @@ module.exports = {
             if (cart) {
                 count = cart.products.length
             }
-
             resolve(count)
         })
     },
@@ -337,3 +338,5 @@ module.exports = {
         })
     })
 }
+
+

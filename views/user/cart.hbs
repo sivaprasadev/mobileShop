@@ -1,5 +1,10 @@
-{{#if error}}
-<h1 class="text-center" style="margin-top:100px">{{errorMsg}}</h1>
+{{#if emptyCart}}
+<img src="\images\carryout-bag-156778_1280.png" class="rounded mx-auto d-block" alt="carryBag" style="height:15rem;width:15rem;margin-top:5rem">
+<h1 class="text-center mt-2" style="margin-bottom:1rem">{{Msg}}<span style="color: red;">!</span>
+<div class="d-flex justify-content-center mt-4">
+    <a href="/" class="btn btn-primary">Shop Now</a>
+</div>
+</h1>
 {{else}}
 <section>
     <div class="container">

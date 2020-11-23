@@ -5,7 +5,7 @@ const productHelpers = require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers')
 const commaNumber = require('comma-number');
 const { route } = require('./admin');
-//Here we using middile to verify login
+//Verify middleware
 const verifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
     next()
@@ -70,14 +70,14 @@ router.get('/logout', (req, res) => {
 
 router.get('/cart', verifyLogin, async (req, res) => {
 
-  let error
+  let emptyCart
 
   cartCount = await userHelpers.getCartCount(req.session.user._id)
 
   if (cartCount == 0) {
-    error = true
+    emptyCart = true
   }
-  let errorMsg = "No items in the cart"
+  let Msg = "Your cart is empty "
 
   let products = await userHelpers.getCartProducts(req.session.user._id)
 
@@ -86,7 +86,7 @@ router.get('/cart', verifyLogin, async (req, res) => {
     total = commaNumber(await userHelpers.getTotalAmount(req.session.user._id))
   }
   //console.log(products)
-  res.render('user/cart', { products, user: req.session.user, total, error, errorMsg })
+  res.render('user/cart', { products, user: req.session.user, total, emptyCart, Msg })
 })
 router.get('/add-to-cart/:id', (req, res) => {
   //console.log("api call");
@@ -166,6 +166,4 @@ router.get('/delete-product/:id', (req, res) => {
     res.redirect('/cart')
   })
 })
-
-
 module.exports = router;

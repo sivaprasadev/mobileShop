@@ -2,8 +2,8 @@
     <div class="container mt-5">
         <form action="" id="checkout-form">
             <div class="row">
-                <div class="col md-6">
-                    <h2>Enter Delivery details</h2><br>
+                <div class="col md-6 mt-5">
+                    <h2>Billing Address</h2><br>
                     <div>
                         <label for="">Address</label>
                         <input type="text" id="address" name="address" class="form-control">
@@ -14,29 +14,42 @@
                         <input type="text" name="userId" value="{{user._id}}" hidden>
                     </div>
                 </div>
-                <div class="col-md-4  ">
-                    <div class="container mt-5 ml-5 checkout border border-dark">
-                        <h5>Total amount: Rs.{{total}}</h5>
-                        <hr>
-                        <div class="payment ">
-                            <p>Payment Method</p>
-                            <label for="" class="radio-inline">
-                                <input type="radio" name="payment-method" value="COD" checked> COD
-                            </label><br>
-                            <label for="" class="radio-inline mt-2">
-                                <input type="radio" name="payment-method" value="ONLINE"> Online Payment
-                            </label>
-                            <button class="btn btn-primary float-right ml-2" type="submit">Checkout</button>
-                        </div>
+                <div class="col-md-4 mt-auto ">
+                    <div class=" border border-dark mt-5 ml-5" style="height: 21rem">
+                        <div class="container mt-5 mr-5 checkout">
+                            <h5>Total amount: Rs.{{total}}</h5>
+                            <hr>
+                            <div class="payment ">
+                                <p>Payment Method</p>
+                                <label for="" class="radio-inline">
+                                    <input type="radio" name="payment-method" value="COD" checked> COD
+                                </label><br>
+                                <label for="" class="radio-inline mt-2">
+                                    <input type="radio" name="payment-method" value="ONLINE"> Online Payment
+                                </label><br><br>
+                                <button class="btn btn-primary ml-auto" type="submit" style="width:50"
+                                    >CHECKOUT
+                                    <span class="ml-3">
+                                        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-cash"
+                                            fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M15 4H1v8h14V4zM1 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H1z" />
+                                            <path
+                                                d="M13 4a2 2 0 0 0 2 2V4h-2zM3 4a2 2 0 0 1-2 2V4h2zm10 8a2 2 0 0 1 2-2v2h-2zM3 12a2 2 0 0 0-2-2v2h2zm7-4a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" />
+                                        </svg>
+                                    </span>
 
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
 </section>
-
 <script>
+
     $("#checkout-form").submit((e) => {
         e.preventDefault()
         $.ajax({
@@ -64,7 +77,7 @@
             "image": "https://example.com/your_logo",
             "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response) {
-               
+
 
                 verifyPayment(response, order)
             },
@@ -94,10 +107,10 @@
                 order
             },
             method: 'post',
-            success:(response)=>{
-                if(response.status){
+            success: (response) => {
+                if (response.status) {
                     location.href = '/order-success'
-                }else{
+                } else {
                     alert("Payment failed")
                 }
             }

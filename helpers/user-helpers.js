@@ -143,16 +143,26 @@ module.exports = {
         details.count = parseInt(details.count)
         details.quantity = parseInt(details.quantity)
         return new Promise((resolve, reject) => {
-
-              db.get().collection(collection.CART_COLLECTION)
+            if(details.count === -1 && details.quantity === 0){
+                db.get().collection(collection.CART_COLLECTION).
+                updateOne({_id:objectId(details.cart)},
+                {
+                    $pull:{products:{item:objectId(details.product)}}
+                }
+                ).then((response)=>{
+                    resolve({removeProduct:true})
+                    
+                })
+            }else{
+                db.get().collection(collection.CART_COLLECTION)
                 .updateOne({ _id: objectId(details.cart), 'products.item': objectId(details.product) },
                     {
                         $inc: { 'products.$.quantity': details.count }
                     }
                 ).then((response) => {
-                    resolve(response)
+                    resolve({qtyChange:true})
                 })
-
+            }
 
         })
     },
@@ -192,8 +202,11 @@ module.exports = {
                     }
                 }
             ]).toArray()
-            //console.log(total[0].total);
-            resolve(total[0].total)
+            if(total[0].total==0){
+                reject("Total is zero")
+            }else{
+                resolve(total[0].total)
+            }
         })
     },
 

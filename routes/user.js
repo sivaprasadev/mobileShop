@@ -1,10 +1,12 @@
 var express = require('express');
-const { response } = require('../app');
+const { response, render } = require('../app');
 var router = express.Router();
 const productHelpers = require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers')
 const commaNumber = require('comma-number');
 const { route } = require('./admin');
+const { body, validationResult } = require('express-validator');
+const { reject } = require('bcrypt/promises');
 //Verify middleware
 const verifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
@@ -98,12 +100,12 @@ router.get('/add-to-cart/:id', (req, res) => {
 })
 
 router.post('/change-product-quantity', (req, res, next) => {
-  //console.log(req.body);
-  userHelpers.changeProductQuantity(req.body).then(async (response) => {
 
-    response.total = commaNumber(await userHelpers.getTotalAmount(req.body.user))
-    res.json(response)
-
+  userHelpers.changeProductQuantity(req.body).then(async(response) => {
+    commaNumber(await userHelpers.getTotalAmount(req.body.user).then((total) => {
+        response.total=total
+        res.json(response)
+    }))
   })
 })
 
@@ -112,21 +114,38 @@ router.get('/place-order', verifyLogin, async (req, res) => {
   res.render('user/place-order', { total, user: req.session.user })
 })
 
-router.post('/place-order', async (req, res) => {
-  let products = await userHelpers.getCartProductList(req.body.userId)
-  let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
-  userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
-    if (req.body['payment-method'] === 'COD') {
-      res.json({ codSuccess: true })
-    } else {
-      userHelpers.generateRazorpay(orderId, totalPrice).then((response) => {
-        res.json(response)
-      })
-    }
+router.post('/place-order',
 
+  /*[
+    //pincode must be 5 digits long
+    body('pincode').isLength({ min: 5 }),
+    //mobile number should be in 10 digits
+    body('mobile').isLength({ min: 10 })
+  ],*/
+
+  async (req, res) => {
+
+    /*const errors = validationResult(req);
+    //console.log(errors.array());
+    let e = errors.array();
+    if (!errors.isEmpty()) {
+      //return res.status(400).json({ errors: errors.array() });
+      res.render('/place-order', { e })
+    } else {}*/
+    let products = await userHelpers.getCartProductList(req.body.userId)
+    let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
+    userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
+      if (req.body['payment-method'] === 'COD') {
+        res.json({ codSuccess: true })
+      } else {
+        userHelpers.generateRazorpay(orderId, totalPrice).then((response) => {
+          res.json(response)
+        })
+      }
+
+    })
+    //console.log(req.body);
   })
-  //console.log(req.body);
-})
 
 router.get('/order-success', (req, res) => {
   res.render('user/order-success', { user: req.session.user })
@@ -166,4 +185,29 @@ router.get('/delete-product/:id', (req, res) => {
     res.redirect('/cart')
   })
 })
+
+router.get('/test', (req, res) => {
+  res.render('user/test')
+})
+
+router.post('/test',
+
+  [
+    //pincode must be 5 digits long
+    body('pincode').isLength({ min: 5 }),
+    //mobile number should be in 10 digits
+    body('mobile').isLength({ min: 10 })
+  ],
+
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log("Validation error");
+      //return res.status(400).json({ errors: errors.array() });
+      res.render('user/test', { errors: errors.array() })
+    } else {
+      console.log("Validation successfull");
+    }
+  })
+
 module.exports = router;

@@ -1,23 +1,26 @@
-<section>
-    <div class="container mt-5 ">
-        <h1 class="text-center">Create New Account</h1>
-        <form action="/signup" method="POST">
-            <div class="form-group ">
-                <label for="exampleInputName">Enter Name</label>
-                <input type="text" class="form-control" name="Name" aria-describedby="emailHelp"
-                    placeholder="Enter Name"><br>
-                <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" name="Email" aria-describedby="emailHelp"
-                    placeholder="Enter email">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                    else.</small>
-            </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" name="Password" placeholder="Password">
-            </div>
-            <a href="/login">Already have an account?</a>
-            <button type="submit" class="btn btn-primary float-right">Submit</button>
-        </form>
+
+<link rel="stylesheet" href="stylesheets/loginPage.css">
+<form action="/signup" method="POST">
+
+    <div class="loginText  d-flex flex-column bd-highlight justify-content-center align-items-center">
+        <h1>Signup</h1>
     </div>
-</section>
+    <div class="form-group d-flex flex-column bd-highlight justify-content-center align-items-center">
+        <input type="text" class="form-control form-control w-25 mt-2 border-top-0 border-right-0 border-left-0 border-dark 
+    rounded-0" name="Name" aria-describedby="emailHelp"
+                    placeholder="Enter Name">
+        <input type="email" name="Email" class="form-control w-25 mt-5 border-top-0 border-right-0 border-left-0 border-dark 
+    rounded-0" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        <input type="password" name="Password" class="form-control w-25 mt-5 border-top-0 border-right-0 border-left-0 border-dark
+    rounded-0" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Password">
+
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary mt-5 ">Signup</button>
+    </div>
+</form>
+<div class="d-flex justify-content-center mt-2">
+    <a href="/login">Already have an account?</a>
+</div>

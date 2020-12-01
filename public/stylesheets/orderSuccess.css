@@ -1,0 +1,16 @@
+.container{
+    border:1px solid #007bff;
+    width: 60rem;
+    height: 20rem;
+    margin-top:5rem;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 5px #007bff;
+}
+.heading{
+    margin-bottom: 1.5rem;
+    font-style: bold;
+    font-family: 'Courier New', Courier, monospace;
+}

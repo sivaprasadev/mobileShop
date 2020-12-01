@@ -60,7 +60,7 @@ router.post('/login', (req, res) => {
       req.session.user = response.user
       res.redirect('/')
     } else {
-      req.session.loginErr = "Invalid user credentials"
+      req.session.loginErr = "Invalid user credentials, Try again !"
       res.redirect('/login')
     }
   })
@@ -87,24 +87,20 @@ router.get('/cart', verifyLogin, async (req, res) => {
   if (products.length > 0) {
     total = commaNumber(await userHelpers.getTotalAmount(req.session.user._id))
   }
-  //console.log(products)
   res.render('user/cart', { products, user: req.session.user, total, emptyCart, Msg })
 })
 router.get('/add-to-cart/:id', (req, res) => {
-  //console.log("api call");
-
   userHelpers.addToCart(req.params.id, req.session.user._id).then(() => {
-    //res.redirect('/')
     res.json({ status: true })
   })
 })
 
 router.post('/change-product-quantity', (req, res, next) => {
 
-  userHelpers.changeProductQuantity(req.body).then(async(response) => {
+  userHelpers.changeProductQuantity(req.body).then(async (response) => {
     commaNumber(await userHelpers.getTotalAmount(req.body.user).then((total) => {
-        response.total=total
-        res.json(response)
+      response.total = total
+      res.json(response)
     }))
   })
 })
@@ -114,38 +110,20 @@ router.get('/place-order', verifyLogin, async (req, res) => {
   res.render('user/place-order', { total, user: req.session.user })
 })
 
-router.post('/place-order',
+router.post('/place-order', async (req, res) => {
+  let products = await userHelpers.getCartProductList(req.body.userId)
+  let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
+  userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
+    if (req.body['payment-method'] === 'COD') {
+      res.json({ codSuccess: true })
+    } else {
+      userHelpers.generateRazorpay(orderId, totalPrice).then((response) => {
+        res.json(response)
+      })
+    }
 
-  /*[
-    //pincode must be 5 digits long
-    body('pincode').isLength({ min: 5 }),
-    //mobile number should be in 10 digits
-    body('mobile').isLength({ min: 10 })
-  ],*/
-
-  async (req, res) => {
-
-    /*const errors = validationResult(req);
-    //console.log(errors.array());
-    let e = errors.array();
-    if (!errors.isEmpty()) {
-      //return res.status(400).json({ errors: errors.array() });
-      res.render('/place-order', { e })
-    } else {}*/
-    let products = await userHelpers.getCartProductList(req.body.userId)
-    let totalPrice = await userHelpers.getTotalAmount(req.body.userId)
-    userHelpers.placeOrder(req.body, products, totalPrice).then((orderId) => {
-      if (req.body['payment-method'] === 'COD') {
-        res.json({ codSuccess: true })
-      } else {
-        userHelpers.generateRazorpay(orderId, totalPrice).then((response) => {
-          res.json(response)
-        })
-      }
-
-    })
-    //console.log(req.body);
   })
+})
 
 router.get('/order-success', (req, res) => {
   res.render('user/order-success', { user: req.session.user })

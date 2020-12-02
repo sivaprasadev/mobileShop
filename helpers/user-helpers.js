@@ -20,8 +20,25 @@ module.exports = {
             })
         })
     },
+    adminLogin:(adminData)=>{
+        return new Promise(async(resolve,reject)=>{
+            let loginStatus = false
+            let response = {}
+            let admin = await db.get().collection(collection.ADMINUSR_COLLECTION).findOne({email:adminData.Email,
+            password:adminData.Password})
 
-    doLogin: (userData) => {
+            if(admin){
+                console.log("Login succuess");
+                response.admin = admin
+                response.status = true
+                resolve(response)
+            }else{
+                console.log("Login failed");
+                resolve({status:false})
+            }
+        })
+    }
+    ,doLogin: (userData) => {
         return new Promise(async (resolve, reject) => {
             let loginStatus = false
             let response = {}

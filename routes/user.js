@@ -16,7 +16,7 @@ const verifyLogin = (req, res, next) => {
   }
 }
 /* GET home page. */
-router.get('/',verifyLogin, async function  (req, res, next) {
+router.get('/', verifyLogin, async function (req, res, next) {
   let user = req.session.user
   let cartCount = null
   if (req.session.user) {
@@ -118,7 +118,6 @@ router.post('/place-order', async (req, res) => {
         res.json(response)
       })
     }
-
   })
 })
 

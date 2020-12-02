@@ -1,17 +1,24 @@
-.form-group{
-  margin-top:1rem;
+.form-group {
+  margin-top: 1rem;
 }
-.form-control{
+.form-control {
   text-align: center;
   padding: 1px;
-  box-shadow: 1.5px 5px #212529
+  box-shadow: 1.5px 5px #212529;
+  outline: none;
+ 
 }
-
-.loginText{
-  margin-top:10rem;
-  color:rgb(90, 88, 88); 
+.loginText {
+  margin-top: 10rem;
+  color: rgb(90, 88, 88);
 }
-.error{
-  margin-top:0;
+.error {
+  margin-top: 0;
   color: red;
 }
+
+
+
+
+
+

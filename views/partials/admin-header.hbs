@@ -9,16 +9,18 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/admin/view-products">All products <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">All Orders</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">All Users</a>
+                    <a class="nav-link" href="/admin">All products <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
-
+        </div>
+        <div class="dropdown ml-4 mr-4">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Account
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="admin/login">Login</a>
+            </div>
         </div>
     </nav>
 </header>

@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="stylesheets/loginPage.css">
 <form action="" method="POST">
     <div class="loginText d-flex flex-column bd-highlight justify-content-center align-items-center">
+        {{#if loginErr}}
+        <p class="error mt-5"><i>{{loginErr}}</i></p>
+        {{/if}}
         <h1>Login</h1>
     </div>
     <div class="form-group d-flex flex-column bd-highlight justify-content-center align-items-center">

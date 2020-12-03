@@ -19,7 +19,11 @@
                 Account
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="admin/login">Login</a>
+                {{#if ad}}
+                <a class="dropdown-item" href="/admin/logout">Logout</a>
+                {{else}}
+                <a class="dropdown-item" href="/admin/login">Login</a>
+                {{/if}}
             </div>
         </div>
     </nav>

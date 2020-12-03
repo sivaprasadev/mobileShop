@@ -4,30 +4,52 @@ const productHelpers = require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers')
 const { route } = require('./user');
 var router = express.Router();
-router.get('/', function (req, res, next) {
+const verifyLogin = (req, res, next) => {
+  if (req.session.loggedIn) {
+    next()
+  } else {
+    res.redirect('/admin/login')
+  }
+}
+router.get('/', verifyLogin, function (req, res, next) {
+  let ad = req.session.ad
   productHelpers.getAllProducts().then((products) => {
     //console.log(products);
-    res.render('admin/view-products', { admin: true, products })
+    res.render('admin/view-products', { admin: true, products, ad })
   })
 });
 
-router.get('/login',(req,res)=>{
-  res.render('admin/login',{admin:true})
+router.get('/login', (req, res) => {
+  if (req.session.loggedIn) {
+    res.redirect('/admin')
+  } else {
+    res.render('admin/login', { admin: true, "loginErr": req.session.loginErr })
+    req.session.loginErr = false
+  }
+
 })
 
-router.post('/login',(req,res)=>{
-  userHelpers.adminLogin(req.body).then((response)=>{
-    if(response.status){
+router.post('/login', (req, res) => {
+  userHelpers.adminLogin(req.body).then((response) => {
+    if (response.status) {
+      req.session.loggedIn = true
+      req.session.ad = response.admin
       res.redirect('/admin')
-    }else{
-      res.redirect('admin/login')
+    } else {
+      req.session.loginErr = "Invalid credentials"
+      res.redirect('/admin/login')
     }
   })
 })
 
-router.get('/add-product', function (req, res) {
-  res.render('admin/add-product')
+router.get('/logout', (req, res) => {
+  req.session.destroy()
+  res.redirect('/admin/login')
+})
 
+router.get('/add-product', verifyLogin, function (req, res) {
+  let ad = req.session.ad
+  res.render('admin/add-product', { admin: true, ad })
 })
 
 router.post('/add-product', (req, res) => {
@@ -48,16 +70,15 @@ router.post('/add-product', (req, res) => {
 
 router.get('/delete-product/:id', (req, res) => {
   let proId = req.params.id
-  console.log(proId)
   productHelpers.deleteProduct(proId).then((response) => {
     res.redirect('/admin/')
   })
 })
 
 router.get('/edit-product/:id', async (req, res) => {
+  let ad = req.session.ad
   let product = await productHelpers.getAllProductDetails(req.params.id)
-  console.log(product);
-  res.render('admin/edit-product', { product })
+  res.render('admin/edit-product', { product, admin: true, ad })
 
 })
 

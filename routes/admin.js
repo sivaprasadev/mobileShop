@@ -53,14 +53,13 @@ router.get('/add-product', verifyLogin, function (req, res) {
 })
 
 router.post('/add-product', (req, res) => {
-  console.log(req.body);
-  console.log(req.files.Image);
   productHelpers.addProduct(req.body, (id) => {
     let image = req.files.image
     console.log(id)
     image.mv('./public/product-images/' + id + '.jpg', (err) => {
       if (!err) {
-        res.render("admin/add-product")
+        let ad = req.session.ad
+        res.render("admin/add-product",{admin:true,ad})
       } else {
         console.log(err);
       }
